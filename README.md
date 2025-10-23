@@ -12,21 +12,20 @@ A modern, feature-rich social media web application built with Next.js and Tailw
 
 - **Secure Authentication:** Full user registration and login flow with JWT persistence in `localStorage`.
 - **Dynamic Post Feed:** A paginated, masonry-style homepage that displays posts from the community.
-- **Powerful Controls:** A sticky sidebar on the homepage allows users to:
-  - **Live Search:** A debounced, real-time search for both users and posts with an interactive dropdown.
-  - **Sort:** Change the order of posts.
-  - **Paginate:** Control the number of posts per page.
-- **Rich User Profiles:** Dynamic profile pages displaying user information, banner, avatar, and a feed of their posts.
+- **Contextual Side Panel:** A sticky sidebar on the homepage that provides relevant actions and information:
+  - **Create Post:** A quick-access button that opens a fully featured, accessible modal for content creation.
+  - **Authors on Page:** A context-aware list of the unique authors currently visible on the feed, allowing for easy discovery.
+  - **Sort & Filter:** Controls to change the order and number of posts per page.
+- **Rich User Profiles:** Dynamic profile pages displaying user information, banner, avatar, stats, and a feed of their posts.
 - **Social Interaction:**
   - **Optimistic UI for Reactions:** Instantly react to posts with a variety of emojis. The UI updates immediately, providing a snappy, responsive feel.
   - **Nested Comments:** A full-featured, YouTube-style comment system that correctly sorts a flat API response into a nested tree of parents and replies.
 - **Full Content Ownership:**
-  - **Create Posts:** A "Create Post" button opens a fully accessible, focus-trapped modal with a form for creating new content.
-  - **Edit & Delete Posts:** Post owners have access to "Edit" and "Delete" actions on their profile and single post pages, protected by on-brand confirmation dialogs.
+  - **Edit & Delete Posts:** Post owners have access to "Edit" and "Delete" actions, protected by on-brand confirmation dialogs.
   - **Follow/Unfollow System:** Users can follow and unfollow other profiles.
 - **Polished User Experience:**
   - **Animated "Aurora" Background:** A generative, animated gradient background that provides a unique and modern aesthetic.
-  - **Glassmorphism UI:** Semi-transparent, blurred UI elements create a sense of depth and context.
+  - **Crystallize Effect:** Post cards feature a unique, generative "shattered glass" background, ensuring no two cards look alike.
   - **Skippable Login Intro:** A custom, animated intro sequence plays on a fresh login, which can be disabled by the user.
   - **Error Boundary:** The application is wrapped in an Error Boundary to prevent component-level crashes from breaking the entire page.
 
@@ -36,7 +35,7 @@ A modern, feature-rich social media web application built with Next.js and Tailw
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS (v4) with PostCSS
 - **Animation:** Framer Motion
-- **State Management:** React Context (`AuthContext`) and `useState`/`useEffect`
+- **State Management:** React Context (`AuthContext`) and React Hooks
 - **UI Components:** Custom, reusable components for Modals, Forms, and more.
 - **Linting:** ESLint
 
@@ -52,11 +51,11 @@ You will need Node.js (version 18.x or later) and npm installed on your computer
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/socialverse.git
+    git clone https://github.com/your-username/SocialVerse.git
     ```
 2.  **Navigate to the project directory:**
     ```bash
-    cd socialverse
+    cd SocialVerse
     ```
 3.  **Install dependencies:**
     ```bash
@@ -77,23 +76,24 @@ This project requires environment variables to connect to the Noroff API.
     NEXT_PUBLIC_NOROFF_API_KEY=YOUR_API_KEY_HERE
     ```
 
-3.  Replace `YOUR_API_KEY_HERE` with the API key.
+3.  To get an API key, you must be a registered student at Noroff. Replace `YOUR_API_KEY_HERE` with your personal key.
 
-### Running the Application
+## 📜 Available Scripts
 
-1.  **Start the development server:**
-    ```bash
-    npm run dev
-    ```
-2.  Open your browser and navigate to [http://localhost:3000](http://localhost:3000) to see the application in action.
+In the project directory, you can run the following commands:
+
+- **`npm run dev`**
+  Runs the app in development mode with Turbopack. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will hot-reload if you make edits.
+
+- **`npm run build`**
+  Builds the app for production to the `.next` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
+
+- **`npm run start`**
+  Starts a production server for the built app. This is used to view the production build locally before deploying.
+
+- **`npm run lint`**
+  Runs the ESLint linter to find and fix problems in your codebase.
 
 ## 🔗 API
 
-This project is powered by the [Noroff Social API v2](https://docs.noroff.dev/docs/v2/social). All data fetching and content management is handled through this API.
-
-## 🛣️ Future Work
-
-- Implement the "Edit Profile" form functionality.
-- Add a modal to display lists of followers and following.
-- Implement the "Delete Comment" functionality with ownership checks.
-- Explore real-time updates for comments and reactions using polling or WebSockets.
+This project is powered by the [Noroff Social API v2](https://docs.noroff.dev/docs/v2/social/posts). All data fetching and content management is handled through this API.
