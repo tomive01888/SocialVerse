@@ -5,7 +5,7 @@ import { PostDetail, Profile } from "@/lib/types";
 import { motion } from "framer-motion";
 import UntrustedImage from "./UntrustedImage";
 import { FileText, Users } from "lucide-react";
-import Spinner from "./Spinner";
+import Spinner from "./general/Spinner";
 
 interface SearchDropdownProps {
   posts: PostDetail[];

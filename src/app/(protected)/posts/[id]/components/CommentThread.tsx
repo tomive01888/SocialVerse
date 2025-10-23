@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import UntrustedImage from "./UntrustedImage";
+import UntrustedImage from "@/components/UntrustedImage";
 import CommentForm from "./CommentForm";
 import { CommentNode } from "@/hooks/useCommentTree";
 

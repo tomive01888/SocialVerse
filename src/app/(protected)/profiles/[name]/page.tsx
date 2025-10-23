@@ -5,19 +5,19 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import { Profile, PostDetail } from "@/lib/types";
-import Spinner from "@/components/Spinner";
-import ProfileHeader from "@/components/ProfileHeader";
-import PostCard from "@/components/PostCard";
+import Spinner from "@/components/general/Spinner";
+import ProfileHeader from "./components/ProfileHeader";
 import toast from "react-hot-toast";
-import Modal from "@/components/Modal";
-import PostForm from "@/components/PostForm";
+import Modal from "@/components/general/Modal";
+import PostForm from "@/components/forms/PostForm";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import FollowList from "@/components/FollowList";
+import FollowList from "@/app/(protected)/profiles/[name]/components/FollowList";
 import { buildUrl } from "@/lib/urlBuilder";
+import ManagePostCard from "./components/ManagePostCard";
 
 export default function ProfilePage() {
   const { name } = useParams<{ name: string }>();
-  const { userProfile, accessToken } = useAuth();
+  const { accessToken } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [posts, setPosts] = useState<PostDetail[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,7 +99,8 @@ export default function ProfilePage() {
 
     setIsDeleting(true);
     try {
-      await authenticatedFetch(`/social/posts/${postToDelete.id}`, { method: "DELETE", token: accessToken });
+      const apiUrl = buildUrl(`/social/posts/${postToDelete.id}`);
+      await authenticatedFetch(apiUrl, { method: "DELETE", token: accessToken });
       toast.success("Post deleted.");
       setIsDeleteModalOpen(false);
       setPostToDelete(null);
@@ -111,8 +112,6 @@ export default function ProfilePage() {
       setIsDeleting(false);
     }
   };
-
-  const isMyProfile = userProfile?.name === profile?.name;
 
   if (isLoading) {
     return (
@@ -141,12 +140,11 @@ export default function ProfilePage() {
       <section>
         <h2 className="mb-6 text-2xl font-bold text-shako-off-white">Posts by {profile.name}</h2>
         {posts && posts.length > 0 ? (
-          <div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
+          <div className="columns-1 space-y-4 sm:columns-2 xl:columns-3">
             {posts.map((post) => (
-              <PostCard
+              <ManagePostCard
                 key={post.id}
                 post={post}
-                isOwner={isMyProfile}
                 onEdit={() => handleEdit(post)}
                 onDelete={() => openDeleteConfirmation(post)}
               />
@@ -172,7 +170,8 @@ export default function ProfilePage() {
 
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
         <ConfirmationDialog
-          title="Delete Post"
+          title={`Delete Post:`}
+          secondaryTitle={`'${postToDelete?.title}'`}
           message="Are you sure you want to permanently delete this post? This action cannot be undone."
           confirmText="Yes, Delete"
           onConfirm={handleConfirmDelete}

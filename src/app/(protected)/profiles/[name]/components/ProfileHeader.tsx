@@ -1,15 +1,17 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Profile } from "@/lib/types";
-import UntrustedImage from "./UntrustedImage";
+import { PostDetail, Profile } from "@/lib/types";
 import { authenticatedFetch } from "@/lib/api";
 import toast from "react-hot-toast";
-import Modal from "./Modal";
-import ProfileForm from "./ProfileForm";
 import { Settings } from "lucide-react";
-import ProfileSettingsMenu from "./ProfileSettingsMenu";
 import { AnimatePresence } from "framer-motion";
+import ProfileSettingsMenu from "./ProfileSettingsMenu";
+import UntrustedImage from "@/components/UntrustedImage";
+import Modal from "@/components/general/Modal";
+import ProfileForm from "./ProfileForm";
+import CreatePostButton from "@/components/CreatePostButton";
+import { useRouter } from "next/navigation";
 
 interface ProfileHeaderProps {
   profile: Profile;
@@ -62,6 +64,7 @@ export default function ProfileHeader({
   onShowFollowing,
 }: ProfileHeaderProps) {
   const { userProfile } = useAuth();
+  const router = useRouter();
   const isMyProfile = userProfile?.name === profile.name;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -71,6 +74,14 @@ export default function ProfileHeader({
 
   const handleFormSuccess = () => {
     setIsEditModalOpen(false);
+    onProfileUpdate();
+  };
+
+  const handlePostCreated = (newPost?: PostDetail) => {
+    if (newPost) {
+      toast.success("Post created! Navigating...");
+      router.push(`/posts/${newPost.id}`);
+    }
     onProfileUpdate();
   };
 
@@ -149,6 +160,9 @@ export default function ProfileHeader({
                 <p className="text-sm text-gray-400 transition-colors hover:text-white">Following</p>
               </button>
             </div>
+          </div>
+          <div className="float-end mb-6">
+            <CreatePostButton onPostCreated={handlePostCreated} />
           </div>
         </div>
       </header>

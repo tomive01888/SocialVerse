@@ -25,5 +25,5 @@ export default function UntrustedImage({ src, alt, className, fallbackSrc = "/fa
     setCurrentSrc(fallbackSrc);
   };
 
-  return <img src={currentSrc} alt={alt} className={className} onError={handleImageError} loading="lazy" />;
+  return <img src={currentSrc} alt={alt} className={`${className}`} onError={handleImageError} loading="lazy" />;
 }

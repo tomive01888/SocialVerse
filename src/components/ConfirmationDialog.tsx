@@ -4,6 +4,7 @@ import { AlertTriangle } from "lucide-react";
 
 interface ConfirmationDialogProps {
   title: string;
+  secondaryTitle?: string;
   message: string;
   confirmText?: string;
   cancelText?: string;
@@ -14,6 +15,7 @@ interface ConfirmationDialogProps {
 
 export default function ConfirmationDialog({
   title,
+  secondaryTitle,
   message,
   confirmText = "Confirm",
   cancelText = "Cancel",
@@ -27,6 +29,7 @@ export default function ConfirmationDialog({
         <AlertTriangle className="h-6 w-6 text-shako-accent" aria-hidden="true" />
       </div>
       <h2 className="mt-4 text-2xl font-bold text-shako-off-white">{title}</h2>
+      <h3 className="mt-4 text-xl font-bold text-shako-off-white">{secondaryTitle}</h3>
       <p className="mt-2 text-gray-300">{message}</p>
       <div className="mt-8 flex justify-center gap-4">
         <button

@@ -2,20 +2,21 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import Link from "next/link";
+import { buildUrl } from "@/lib/urlBuilder";
+import { Share2, Edit, Trash2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import { PostDetail } from "@/lib/types";
 import UntrustedImage from "@/components/UntrustedImage";
-import Spinner from "@/components/Spinner";
-import { Share2, Edit, Trash2 } from "lucide-react";
-import Reactions from "@/components/Reactions";
-import Modal from "@/components/Modal";
-import PostForm from "@/components/PostForm";
+import Reactions from "@/app/(protected)/posts/[id]/components/Reactions";
+import CommentsSection from "@/app/(protected)/posts/[id]/components/CommentSection";
+import PostForm from "@/components/forms/PostForm";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import CommentsSection from "@/components/CommentSection";
-import { buildUrl } from "@/lib/urlBuilder";
+import Modal from "@/components/general/Modal";
+import Spinner from "@/components/general/Spinner";
+import toast from "react-hot-toast";
+import PostOptions from "./components/PostOptions";
 
 export default function SinglePostPage() {
   const { id } = useParams<{ id: string }>();
@@ -63,7 +64,8 @@ export default function SinglePostPage() {
     if (!post) return;
     setIsDeleting(true);
     try {
-      await authenticatedFetch(`/social/posts/${post.id}`, { method: "DELETE", token: accessToken });
+      const apiUrl = buildUrl(`/social/posts/${post.id}`);
+      await authenticatedFetch(apiUrl, { method: "DELETE", token: accessToken });
       toast.success("Post deleted successfully.");
       router.push("/");
     } catch (error) {
@@ -179,7 +181,7 @@ export default function SinglePostPage() {
 
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
         <ConfirmationDialog
-          title="Delete Post"
+          title={`Delete Post: '${post.title}'`}
           message="Are you sure you want to permanently delete this post? This action cannot be undone."
           confirmText="Yes, Delete"
           onConfirm={handleConfirmDelete}

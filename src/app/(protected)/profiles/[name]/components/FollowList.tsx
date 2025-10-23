@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import UntrustedImage from "./UntrustedImage";
+import UntrustedImage from "../../../../../components/UntrustedImage";
 import { FollowUser } from "@/lib/types";
 
 interface FollowListProps {

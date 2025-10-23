@@ -21,11 +21,13 @@ export async function authenticatedFetch<T>(endpoint: string, options: ApiCallOp
     throw new Error("API key is missing. Please check your .env.local file.");
   }
 
+  console.log("Requesting API endpoint:", endpoint);
+
   const headers: HeadersInit = {
     "X-Noroff-API-Key": apiKey,
   };
 
-  if (token) { 
+  if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 

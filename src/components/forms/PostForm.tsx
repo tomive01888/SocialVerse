@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import { PostDetail } from "@/lib/types";
 import toast from "react-hot-toast";
+import { buildUrl } from "@/lib/urlBuilder";
 
 interface PostFormProps {
   postToEdit?: PostDetail;
@@ -48,14 +49,16 @@ const PostForm = ({ postToEdit, onFormSuccess, onCancel }: PostFormProps) => {
     try {
       let result;
       if (isEditMode && postToEdit) {
-        result = await authenticatedFetch<PostDetail>(`/social/posts/${postToEdit.id}`, {
+        const apiUrl = buildUrl(`/social/posts/${postToEdit.id}`);
+        result = await authenticatedFetch<PostDetail>(apiUrl, {
           method: "PUT",
           body: payload,
           token: accessToken,
         });
         toast.success("Post updated successfully!");
       } else {
-        result = await authenticatedFetch<PostDetail>("/social/posts", {
+        const apiUrl = buildUrl("/social/posts");
+        result = await authenticatedFetch<PostDetail>(apiUrl, {
           method: "POST",
           body: payload,
           token: accessToken,

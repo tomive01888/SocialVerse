@@ -3,9 +3,9 @@ import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Noto_Sans_JP, Zen_Kurenaido } from "next/font/google";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import LoginIntro from "@/components/LoginIntro";
-import Footer from "@/components/Footer";
+import Footer from "@/components/ui/Footer";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],

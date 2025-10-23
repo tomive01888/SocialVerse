@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import PostCard from "@/components/PostCard";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/general/Spinner";
 import { PostDetail, Meta, PaginatedApiResponse } from "@/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
 import CreatePostButton from "@/components/CreatePostButton";
@@ -58,7 +58,7 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto grid grid-cols-1 gap-8 p-4 lg:grid-cols-[1fr_320px]">
-      <main aria-label="Posts feed">
+      <section aria-label="Posts feed">
         {isLoading ? (
           <AnimatePresence>
             <motion.div
@@ -80,8 +80,8 @@ export default function HomePage() {
         ) : (
           <>
             {posts.length > 0 ? (
-              <div
-                className="columns-1 gap-4 sm:columns-2 xl:columns-3"
+              <section
+                className="columns-1 sm:columns-2 xl:columns-3 space-y-4"
                 role="feed"
                 aria-label="Social media posts"
                 aria-busy={isLoading}
@@ -89,7 +89,7 @@ export default function HomePage() {
                 {posts.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
-              </div>
+              </section>
             ) : (
               <p className="text-center text-gray-400" role="status">
                 No posts to show.
@@ -121,7 +121,7 @@ export default function HomePage() {
             )}
           </>
         )}
-      </main>
+      </section>
 
       <motion.aside
         className="h-fit w-full lg:sticky lg:top-28 row-start-1 lg:row-start-auto"

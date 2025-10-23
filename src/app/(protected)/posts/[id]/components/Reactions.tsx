@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import { Reaction } from "@/lib/types";
 import toast from "react-hot-toast";
+import { buildUrl } from "@/lib/urlBuilder";
 
 const EMOJI_OPTIONS = ["👍", "❤️", "🥰", "😂", "😮", "😢", "😠", "🔥", "😱", "🤔", "💯", "💩", "💀"];
 
@@ -65,7 +66,9 @@ export default function Reactions({ postId, initialReactions }: ReactionsProps) 
     setReactions(nextReactions);
 
     try {
-      await authenticatedFetch(`/social/posts/${postId}/react/${symbol}`, {
+      const apiUrl = buildUrl(`/social/posts/${postId}/react/${symbol}`);
+
+      await authenticatedFetch(apiUrl, {
         method: "PUT",
         token: accessToken,
       });

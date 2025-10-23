@@ -1,5 +1,5 @@
-import Header from "@/components/Header";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import Header from "@/components/ui/Header";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { ReactNode } from "react";
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {

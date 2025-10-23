@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "./Modal";
-import PostForm from "./PostForm";
+import Modal from "./general/Modal";
+import PostForm from "./forms/PostForm";
 
 interface CreatePostButtonProps {
   onPostCreated: () => void;
@@ -23,7 +23,7 @@ export default function CreatePostButton({ onPostCreated, className }: CreatePos
         onClick={() => setIsModalOpen(true)}
         className={
           className ||
-          "w-full rounded-md bg-shako-accent py-3 text-lg font-semibold text-white shadow-lg transition-transform hover:scale-102 cursor-pointer"
+          "rounded-md bg-shako-accent px-6 py-2 text-base font-semibold text-white shadow-lg transition-transform hover:scale-105"
         }
       >
         Create New Post

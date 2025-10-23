@@ -1,8 +1,9 @@
 "use client";
+
+import { useCommentTree } from "@/hooks/useCommentTree";
+import { Comment } from "@/lib/types";
 import CommentForm from "./CommentForm";
 import CommentThread from "./CommentThread";
-import { Comment } from "@/lib/types";
-import { useCommentTree } from "@/hooks/useCommentTree";
 
 interface CommentsSectionProps {
   postId: string;
