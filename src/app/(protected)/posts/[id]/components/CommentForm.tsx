@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import toast from "react-hot-toast";
+import { buildUrl } from "@/lib/urlBuilder";
 
 interface CommentFormProps {
   postId: string;
@@ -26,8 +27,8 @@ export default function CommentForm({ postId, onCommentPosted, replyToId, onCanc
       if (replyToId) {
         payload.replyToId = replyToId;
       }
-
-      await authenticatedFetch(`/social/posts/${postId}/comment`, {
+      const apiUrl = buildUrl(`/social/posts/${postId}/comment`)
+      await authenticatedFetch(apiUrl, {
         method: "POST",
         body: payload,
         token: accessToken,
