@@ -10,6 +10,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import CreatePostButton from "@/components/CreatePostButton";
 import AuthorsOnPage from "@/components/AuthorsOnPage";
 import { buildUrl } from "@/lib/urlBuilder";
+import FeedControls from "@/components/FeedControls";
+import PaginationControls from "@/components/PaginationControls";
+import SearchBar from "@/components/SearchBar";
 
 export default function HomePage() {
   const { accessToken } = useAuth();
@@ -96,29 +99,7 @@ export default function HomePage() {
               </p>
             )}
 
-            {shouldShowPagination && (
-              <nav className="mt-8 flex items-center justify-center gap-4" role="navigation" aria-label="Pagination">
-                <button
-                  onClick={() => setPage(page - 1)}
-                  disabled={paginationMeta.isFirstPage}
-                  className="cursor-pointer rounded-md bg-aurora-blue px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-aurora-blue/80 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-shako-indigo disabled:hover:bg-shako-indigo disabled:hover:shadow-sm"
-                  aria-label="Go to previous page"
-                >
-                  Previous
-                </button>
-                <span className="text-sm font-medium text-shako-off-white/80" aria-current="page" aria-live="polite">
-                  Page {paginationMeta.currentPage} of {paginationMeta.pageCount}
-                </span>
-                <button
-                  onClick={() => setPage(page + 1)}
-                  disabled={paginationMeta.isLastPage}
-                  className="cursor-pointer rounded-md bg-aurora-blue px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-aurora-blue/80 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-shako-indigo disabled:hover:bg-shako-indigo disabled:hover:shadow-sm"
-                  aria-label="Go to next page"
-                >
-                  Next
-                </button>
-              </nav>
-            )}
+            {shouldShowPagination && <PaginationControls meta={paginationMeta} onPageChange={setPage} />}
           </>
         )}
       </section>
@@ -132,47 +113,16 @@ export default function HomePage() {
       >
         <div className="flex flex-col gap-6 rounded-lg border border-white/10 bg-white/10 p-6 shadow-lg backdrop-blur-sm">
           <CreatePostButton onPostCreated={fetchPosts} />
-
-          <div>
-            <label htmlFor="sort" className="block text-sm font-medium text-shako-off-white/80 mb-2">
-              Sort By
-            </label>
-            <select
-              id="sort"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="input-themed w-full"
-              aria-describedby="sort-description"
-            >
-              <option value="created">Newest</option>
-              <option value="title">Title</option>
-            </select>
-            <span id="sort-description" className="sr-only">
-              Choose how to sort the posts displayed
-            </span>
-          </div>
-          <div>
-            <label htmlFor="limit" className="block text-sm font-medium text-shako-off-white/80 mb-2">
-              Per Page
-            </label>
-            <select
-              id="limit"
-              value={limit}
-              onChange={(e) => {
-                setLimit(Number(e.target.value));
-                setPage(1);
-              }}
-              className="input-themed w-full"
-              aria-describedby="limit-description"
-            >
-              <option value={8}>8 posts</option>
-              <option value={12}>12 posts</option>
-              <option value={16}>16 posts</option>
-            </select>
-            <span id="limit-description" className="sr-only">
-              Choose how many posts to display per page
-            </span>
-          </div>
+          <SearchBar />
+          <FeedControls
+            sort={sort}
+            onSortChange={setSort}
+            limit={limit}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
           <AuthorsOnPage posts={posts} />
         </div>
       </motion.aside>

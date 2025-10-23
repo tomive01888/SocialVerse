@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { authenticatedFetch } from "@/lib/api";
 import { Profile } from "@/lib/types";
 import toast from "react-hot-toast";
+import { buildUrl } from "@/lib/urlBuilder";
 
 interface ProfileFormProps {
   profileToEdit: Profile;
@@ -41,7 +42,8 @@ export default function ProfileForm({ profileToEdit, onFormSuccess, onCancel }: 
     }
 
     try {
-      await authenticatedFetch(`/social/profiles/${profileToEdit.name}`, {
+      const apiUrl = buildUrl(`/social/profiles/${profileToEdit.name}`);
+      await authenticatedFetch(apiUrl, {
         method: "PUT",
         body: payload,
         token: accessToken,

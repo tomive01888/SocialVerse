@@ -38,7 +38,7 @@ export default function Header() {
           {userProfile && (
             <Link
               href={`/profiles/${userProfile.name}`}
-              className="group flex items-center gap-2 text-sm font-medium text-aurora-pink transition-colors hover:text-purple-400"
+              className="group w-48 flex items-center justify-end gap-2 text-sm font-medium text-aurora-pink transition-colors hover:text-purple-400"
             >
               <UserCircle2 size={20} className="transition-transform group-hover:scale-110" />
               <span>Welcome, {userProfile.name}</span>
