@@ -1,32 +1,56 @@
 import { useMemo } from "react";
 import { Comment } from "@/lib/types";
 
-export interface CommentNode extends Comment {
-  replies: CommentNode[];
+export interface EnrichedComment extends Comment {
+  replyingToName: string | null;
+}
+
+export interface CommentNode {
+  comment: EnrichedComment;
+  replies: EnrichedComment[];
 }
 
 export function useCommentTree(comments: Comment[]): CommentNode[] {
   return useMemo(() => {
-    const sortedComments = [...comments].sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime());
-    const commentMap: { [key: number]: CommentNode } = {};
-    const nestedComments: CommentNode[] = [];
-
-    for (const comment of sortedComments) {
-      commentMap[comment.id] = { ...comment, replies: [] };
+    if (!comments || comments.length === 0) {
+      return [];
     }
 
-    for (const comment of sortedComments) {
-      const commentNode = commentMap[comment.id];
-      if (comment.replyToId) {
-        const parent = commentMap[comment.replyToId];
-        if (parent) {
-          parent.replies.push(commentNode);
+    const commentMap = new Map<number, Comment>(comments.map(c => [c.id, c]));
+
+    const mainComments = comments
+      .filter(c => !c.replyToId)
+      .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime());
+      
+    return mainComments.map(mainComment => {
+      const allReplies: EnrichedComment[] = [];
+      const repliesToFind = [mainComment.id]; 
+
+      comments.forEach(potentialReply => {
+        if(potentialReply.replyToId && comments.some(c => c.id === potentialReply.replyToId)) {
+          const findParent = (id: number): boolean => {
+            if (id === mainComment.id) return true;
+            const parent = commentMap.get(id);
+            return parent?.replyToId ? findParent(parent.replyToId) : false;
+          }
+          if(findParent(potentialReply.replyToId)) {
+            allReplies.push(potentialReply as EnrichedComment);
+          }
         }
-      } else {
-        nestedComments.push(commentNode);
-      }
-    }
+      });
+      
+      const enrichedAndSortedReplies = allReplies
+        .map(reply => {
+          const parent = commentMap.get(reply.replyToId!);
+          return { ...reply, replyingToName: parent?.author?.name || null };
+        })
+        .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime());
 
-    return nestedComments;
+      return {
+        comment: { ...mainComment, replyingToName: null },
+        replies: enrichedAndSortedReplies,
+      };
+    });
+
   }, [comments]);
 }

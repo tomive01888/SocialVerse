@@ -17,7 +17,7 @@ import ManagePostCard from "./components/ManagePostCard";
 
 export default function ProfilePage() {
   const { name } = useParams<{ name: string }>();
-  const { accessToken } = useAuth();
+  const { userProfile, accessToken } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [posts, setPosts] = useState<PostDetail[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +32,9 @@ export default function ProfilePage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<PostDetail | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const isOwner = userProfile?.name === name;
+
 
   const fetchProfileData = useCallback(async () => {
     if (!name || !accessToken) return;
@@ -132,6 +135,7 @@ export default function ProfilePage() {
       {/* This prop drilling is now correct because `fetchProfileData` is a stable function */}
       <ProfileHeader
         profile={profile}
+        isOwner={isOwner}
         onProfileUpdate={fetchProfileData}
         onShowFollowers={handleShowFollowers}
         onShowFollowing={handleShowFollowing}
@@ -143,6 +147,7 @@ export default function ProfilePage() {
           <div className="columns-1 space-y-4 sm:columns-2 xl:columns-3">
             {posts.map((post) => (
               <ManagePostCard
+                isOwner={isOwner}
                 key={post.id}
                 post={post}
                 onEdit={() => handleEdit(post)}
