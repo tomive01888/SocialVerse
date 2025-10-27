@@ -16,7 +16,6 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import Modal from "@/components/general/Modal";
 import Spinner from "@/components/general/Spinner";
 import toast from "react-hot-toast";
-import PostOptions from "./components/PostOptions";
 
 export default function SinglePostPage() {
   const { id } = useParams<{ id: string }>();

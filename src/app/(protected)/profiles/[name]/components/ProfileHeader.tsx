@@ -12,15 +12,17 @@ import Modal from "@/components/general/Modal";
 import ProfileForm from "./ProfileForm";
 import CreatePostButton from "@/components/CreatePostButton";
 import { useRouter } from "next/navigation";
+import { buildUrl } from "@/lib/urlBuilder";
 
 interface ProfileHeaderProps {
   profile: Profile;
+  isOwner: boolean;
   onProfileUpdate: () => void;
   onShowFollowers: () => void;
   onShowFollowing: () => void;
 }
 
-function FollowButton({ name, followers }: { name: string; followers: Profile["followers"] }) {
+function FollowButton({ name, followers}: { name: string; followers: Profile["followers"]}) {
   const { accessToken, userProfile } = useAuth();
   const isFollowing = followers?.some((follower) => follower.name === userProfile?.name) ?? false;
 
@@ -34,7 +36,8 @@ function FollowButton({ name, followers }: { name: string; followers: Profile["f
     setOptimisticIsFollowing(!optimisticIsFollowing);
 
     try {
-      await authenticatedFetch(endpoint, { method: "PUT", token: accessToken });
+      const apiUrl = buildUrl(endpoint)
+      await authenticatedFetch(apiUrl, { method: "PUT", token: accessToken });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred. Please try again.";
       toast.error(errorMessage);
@@ -59,6 +62,7 @@ function FollowButton({ name, followers }: { name: string; followers: Profile["f
 
 export default function ProfileHeader({
   profile,
+  isOwner,
   onProfileUpdate,
   onShowFollowers,
   onShowFollowing,
@@ -161,9 +165,10 @@ export default function ProfileHeader({
               </button>
             </div>
           </div>
-          <div className="float-end mb-6">
+          {isOwner && (<div className="float-end mb-6">
             <CreatePostButton onPostCreated={handlePostCreated} />
-          </div>
+          </div>) }
+          
         </div>
       </header>
 
